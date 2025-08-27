@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>View | Stockbin</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="manifest" href="/manifest.json">
+	
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+</head>
+<body class="bg-gray-100">
+    <%- include('snippets/header') %>
+
+	<section class="main">
+		<div class="mx-4 my-4 max-w-md mx-auto">
+			<h2 class="text-xl font-semibold flex items-center">
+                <span class="material-icons mr-2" style="font-size: 2rem; color: #cb000a;">
+                    <%= viewing.type === 'item' ? 'inventory_2' : 'inbox' %>
+                </span>
+
+                <%= viewing.name %>
+            </h2>
+		</div>
+		<!-- GET redirect to /edit/:id to edit an item -->
+        <!-- POST to /api/delete/:id to delete an item -->
+
+		<div class="mx-4 max-w-md mx-auto">
+            <div class="section-container">
+                <div class="text-lg section-header">Details</div>
+                <div class="section-content">
+                    <% if (viewing.type === 'item') { %>
+                        <p><strong>UPC/ID:</strong> <%= viewing.id %></p>
+						<p><strong>Quantity:</strong> <%= viewing.quantity.toString() %><span style="color: red;"><%= viewing.threshold && viewing.quantity < viewing.threshold ? ' (Low Stock)' : '' %></span></p>
+                        <p><strong>Low Stock Threshold:</strong> <%= viewing.threshold || 'Not set' %></p>
+                        <p><strong>Bin Location:</strong> <a href="/view/<%= viewing.bin %>" style="text-decoration: underline;"><%= data.items.find(i => i.id === viewing.bin)?.name || 'Unknown' %></a></p>
+                        <p><strong>Reference:</strong> <%= viewing.description || 'N/A' %></p>
+                        <p><strong>Tags:</strong> <%= viewing.tags && viewing.tags.length > 0 ? viewing.tags.join(', ') : 'N/A' %></p>
+                    <% } else if (viewing.type === 'bin') { %>
+                        <p><strong>Bin ID:</strong> <%= viewing.id %></p>
+                        <p><strong>Location:</strong> <%= viewing.location || 'N/A' %></p>
+                        <p><strong>Reference:</strong> <%= viewing.description || 'N/A' %></p>
+                        
+						<% const binList = data.items.filter(i => i.type === 'item' && i.bin === viewing.id); %>
+						<p><strong>Items in Bin:</strong>
+                            <%= binList.length %>
+                        </p>
+                        <% if (binList.length > 0) { %>
+                            <ul class="list-disc ml-6">
+                                <% binList.slice(0, 5).forEach(item => { %>
+                                    <li>
+                                        <a href="/view/<%= item.id %>" style="text-decoration: underline;"><%= item.name %></a>
+                                        (<%= item.quantity %> in stock)
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        <% } %>
+
+						<% if (binList.length > 5) { %>
+							<p>and <%= binList.length - 5 %> more...</p>
+						<% } %>
+                    <% } %>
+                    <p><strong>Last Modified:</strong> <%= new Date(viewing.updatedAt).toLocaleString() %></p>
+                </div>
+            </div>
+
+		<div class="section-container">
+            <div class="text-lg section-header">Quick Actions</div>
+
+            <div class="section-content flex justify-between">
+                 <a href="/edit/<%= viewing.id %>" class="btn-red font-bold" style="width: 48%; margin-top: 5px;">Edit</a>
+                <form action="/api/delete/<%= viewing.id %>" method="POST" class="delete" type="<%= viewing.type %>" style="width: 48%;">
+                    <button type="submit" class="btn-red font-bold" style="margin-top: 5px;">Delete</button>
+                </form>
+            </div>
+        </div>
+
+		<p class="status text-center text-sm mt-2"></p>
+	</section>
+
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="/js/view.js"></script>
+    <%- include('snippets/footer') %>
+</body>
+</html>

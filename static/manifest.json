@@ -1,0 +1,16 @@
+{
+    "name": "Stockbin App",
+    "short_name": "Stockbin",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#cb000a",
+    "theme_color": "#cb000a",
+    "icons": [
+      {
+        "src": "/icon.png",
+        "sizes": "600x600",
+        "type": "image/png"
+      }
+    ]
+}

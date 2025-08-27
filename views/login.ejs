@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Login | Stockbin</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="manifest" href="/manifest.json">
+	
+    <link rel="stylesheet" href="/css/login.css">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+</head>
+<body class="bg-gray-100">
+    <%- include('snippets/header') %>
+
+	<section class="main">
+		<div class="mx-4 my-4 max-w-md mx-auto">
+			<h2 class="text-xl font-semibold">Get started with Stockbin</h2>
+		</div>
+	
+		<div class="mx-4 max-w-md mx-auto">
+            <div class="LoginFlow">
+                <p class="header">Enter an email</p>
+                <p class="subheader">Enter your email to log in or sign up</p>
+
+                <form class="request" onsubmit="sendCode(event)">
+                    <input type="email" name="email" autocomplete="email" placeholder="Email">
+                    <p class="status"></p>
+                    <input type="submit" value="Continue">
+                </form>
+
+                <form class="verify" style="display: none;" onsubmit="verifyCode(event)">
+                    <input type="text" name="code" autocomplete="off" placeholder="Enter code">
+                    <p class="status"></p>
+                    <input type="submit" value="Continue">
+                    <p class="subheader">Didn't receive an email? <u class="link" onclick="newCode()">Request a new code.</u></p>
+                </form>
+            </div>
+
+            <div class="LoginFlow_overlay">
+                <span class="loader"></span>
+            </div>
+        </div>
+	</section>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="/js/login.js"></script>
+    <%- include('snippets/footer') %>
+</body>
+</html>

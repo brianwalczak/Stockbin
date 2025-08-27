@@ -1,0 +1,32 @@
+{
+  "name": "stockbin",
+  "version": "0.1.0",
+  "description": "A smart inventory management system, allowing you to you organize, track, and locate your inventory with ease.",
+  "keywords": [
+    "inventory",
+    "stock",
+    "bin",
+    "track"
+  ],
+  "homepage": "https://github.com/brianwalczak/Stockbin#readme",
+  "bugs": {
+    "url": "https://github.com/brianwalczak/Stockbin/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brianwalczak/Stockbin.git"
+  },
+  "license": "Apache-2.0",
+  "author": "Brian Walczak",
+  "type": "commonjs",
+  "main": "index.js",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "dotenv": "^17.2.1",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "lokijs": "^1.5.12",
+    "nodemailer": "^7.0.5"
+  }
+}

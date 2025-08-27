@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Inventory | Stockbin</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="manifest" href="/manifest.json">
+	
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+</head>
+<body class="bg-gray-100">
+    <%- include('snippets/header') %>
+
+	<section class="main">
+		<div class="mx-4 my-4 max-w-md mx-auto">
+			<h2 class="text-xl font-semibold">Your Inventory</h2>
+		</div>
+	
+		<div class="mx-4 max-w-md mx-auto">
+            <div class="flex border-b mb-4 select type">
+                <label class="item py-2 px-4 font-semibold cursor-pointer border-b-2 <%= (!type || type === 'all') ? 'border-red-500' : 'border-transparent hover:text-gray-600 hover:border-gray-300' %>" value="all">All</label>
+                <label class="item py-2 px-4 font-semibold cursor-pointer border-b-2 <%= (type && type === 'item') ? 'border-red-500' : 'border-transparent hover:text-gray-600 hover:border-gray-300' %>" value="item">Items</label>
+                <label class="item py-2 px-4 font-semibold cursor-pointer border-b-2 <%= (type && type === 'bin') ? 'border-red-500' : 'border-transparent hover:text-gray-600 hover:border-gray-300' %>" value="bin">Bins</label>
+            </div>
+
+            <% if(results.length === 0) { %>
+                <div class="section-container">
+                    <div class="text-lg section-header">No results found.</div>
+                    <div class="section-content">
+                        <p>You haven't added any <%= type === 'bin' ? 'bins' : 'items' %> yet. Click the button below to add your first one!</p>
+                        <a href="/create/?type=<%= type === 'bin' ? 'bin' : 'item' %>" class="btn-red font-bold">Add <%= type === 'bin' ? 'Bin' : 'Item' %></a>
+                    </div>
+                </div>
+            <% } else { %>
+                <% results.forEach(item => { %>
+                    <div class="section-container flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="text-lg section-header"><%= item.name %> (<%= item.type === 'item' ? 'Item' : 'Bin' %>)</div>
+                            <div class="section-content">
+                                <p><strong><%= item.type === 'item' ? 'UPC/ID:' : 'Bin ID:' %></strong> <%= item.id %></p>
+                                <p><strong>Last Modified:</strong> <%= new Date(item.updatedAt).toLocaleString() %></p>
+                                <% if(item.type === 'item') { %>
+                                    <p><strong>Bin Location:</strong> <a href="/view/<%= item.bin %>" style="text-decoration: underline;"><%= data.items.find(i => i.id === item.bin)?.name || 'Unknown' %></a></p>
+                                    <p><strong>Quantity:</strong> <%= item.quantity.toString() %><span style="color: red;"><%= item.threshold && item.quantity < item.threshold ? ' (Low Stock)' : '' %></span></p>
+                                <% } %>
+
+                                <% if(item.type === 'bin' && item.location) { %>
+                                    <p><strong>Location:</strong> <%= item.location %></p>
+                                <% } %>
+
+                                <div class="flex justify-between">
+                                    <a href="/edit/<%= item.id %>" class="btn-red font-bold" style="width: 48%;">Edit</a>
+                                    <a href="/view/<%= item.id %>" class="btn-red font-bold" style="width: 48%;">View</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <span class="current-pin material-icons" style="margin-left: -32px; font-size: 32px; color: #cb000a;"><%= item.type === 'item' ? 'inventory_2' : 'inbox' %></span>
+                    </div>
+                <% }); %>
+            <% } %>
+
+            <div class="flex justify-between px-5">
+                <a href="/inventory/?page=<%= Number(page) - 1 %>" class="btn-red font-bold <%= (page > 1) ? '' : 'disabled' %>" style="width: 48px; height: 48px; border-radius: 8px;"><span class="material-icons text-2xl">arrow_back</span></a>
+                <a href="/inventory/?page=<%= Number(page) + 1 %>" class="btn-red font-bold <%= (page < totalPages) ? '' : 'disabled' %>" style="width: 48px; height: 48px; border-radius: 8px;"><span class="material-icons text-2xl">arrow_forward</span></a>
+            </div>
+		</div>
+	</section>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="/js/inventory.js"></script>
+    <%- include('snippets/footer') %>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Dashboard | Stockbin</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="manifest" href="/manifest.json">
+	
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+</head>
+<body class="bg-gray-100">
+    <%- include('snippets/header') %>
+
+	<section class="main">
+		<div class="mx-4 my-4 max-w-md mx-auto">
+			<h2 class="text-xl font-semibold">Your Dashboard</h2>
+		</div>
+	
+		<div class="mx-4 max-w-md mx-auto">
+			<div class="section-container">
+				<div class="text-lg section-header">Inventory Overview</div>
+				<div class="section-content">
+                    <p>Unique Items: <span style="color: green;"><%= data.items.filter(item => item.type === 'item').length %> UPC(s)</span></p>
+					<p>Total Bins: <span style="color: green;"><%= data.items.filter(item => item.type === 'bin').length %> bin<%= data.items.filter(item => item.type === 'bin').length === 1 ? '' : 's' %></span></p><br>
+					<p>Total Items: <span style="color: green;"><%= data.items.filter(item => item.type === 'item').reduce((acc, item) => acc + item.quantity, 0) %> item<%= data.items.filter(item => item.type === 'item').reduce((acc, item) => acc + item.quantity, 0) === 1 ? '' : 's' %></span></p>
+				</div>
+			</div>
+
+			<div class="section-container">
+				<div class="text-lg section-header">Action Required</div>
+				<div class="section-content">
+					<% const lowStockCount = data.items.filter(item => item.type === 'item' && item.threshold && (item.quantity < item.threshold)).length; %>
+
+					<p>Status: <span style="color: <%= lowStockCount > 0 ? 'red' : 'green' %>;"><%= lowStockCount > 0 ? 'Some items need your attention.' : 'All items are properly stocked.' %></span></p>
+					<p>Low Stock Items: <span style="color: <%= lowStockCount > 0 ? 'red' : 'green' %>;"><%= lowStockCount %> UPC(s)</span></p>
+				</div>
+			</div>
+
+			<div class="section-container">
+				<div class="text-lg section-header">Quick Actions</div>
+				<div class="section-content">
+					<a href="/create/?type=item" class="btn-red font-bold" style="margin-top: 5px;">Add Item</a>
+					<a href="/create/?type=bin" class="btn-red font-bold">Add Bin</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+    <%- include('snippets/footer') %>
+</body>
+</html>

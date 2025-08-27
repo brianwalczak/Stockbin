@@ -1,0 +1,18 @@
+<!-- Top Bar -->
+<div class="bg-red-500 text-white flex items-center justify-between p-3 top-bar">
+    <!--<button class="text-white w-9 h-9 flex items-center justify-center">
+        <span class="material-icons icon">menu</span>
+    </button>
+    <h1 class="text-xl font-bold">Stockbin</h1>-->
+
+    <h1 class="text-xl font-bold m-3">Stockbin</h1>
+    <% if (user) { %>
+        <button class="text-white w-9 h-9 flex items-center justify-center" onclick='window.location.href = "/logout";'>
+            <span class="material-icons icon">logout</span>
+        </button>
+    <% } else { %>
+        <button class="text-white w-9 h-9 flex items-center justify-center" onclick='window.location.href = "/login";'>
+            <span class="material-icons icon">account_circle</span>
+        </button>
+    <% } %>
+</div>

@@ -1,0 +1,114 @@
+/*!
+ * A passwordless login flow, created by Brian Walczak.
+ *
+ * Copyright (c) 2025 Brian Walczak
+ * Author: Brian Walczak (https://github.com/BrianWalczak)
+ * Last Updated: 2025-08-26
+ */
+
+.LoginFlow {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 5px;
+    padding: 20px;
+    border: 1px solid #d9d9d9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.LoginFlow .header {
+    font-size: 18px;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.LoginFlow .subheader {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.LoginFlow form .subheader {
+    font-size: 13px;
+    padding-top: 10px;
+}
+
+.LoginFlow form .subheader .link {
+    color: blue;
+    cursor: pointer;
+}
+
+.LoginFlow form {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.LoginFlow .status {
+    font-size: 13px;
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 3px;
+}
+
+.LoginFlow_overlay {
+    visibility: hidden;
+    display: flex;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.LoginFlow_overlay .loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #FFF;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+.LoginFlow input[type="text"],
+.LoginFlow input[type="email"] {
+    text-align: left;
+    font-size: 15px;
+    box-sizing: border-box;
+    max-width: 100%;
+    width: 100%;
+    height: 52.5px;
+    padding-left: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.LoginFlow input[type="submit"] {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    box-sizing: border-box;
+    max-width: 100%;
+    width: 100%;
+    height: 50px;
+    padding-left: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: white;
+    background-color: black;
+    cursor: pointer;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
