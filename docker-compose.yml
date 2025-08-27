@@ -1,0 +1,16 @@
+services:
+  app:
+    image: stockbin
+    container_name: stockbin
+    ports:
+      - "7000:3000" # replace 7000 with desired port
+    volumes:
+      - ./data:/usr/src/app/data
+    environment:
+      FILES_LOCATION: /usr/src/app/data
+      SMTP_HOSTNAME: ""
+      SMTP_PORT: 465
+      SMTP_SECURE: true
+      SMTP_USERNAME: ""
+      SMTP_PASSWORD: ""
+    restart: unless-stopped
