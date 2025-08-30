@@ -22,7 +22,9 @@ async function scanQRCode() {
     
     Html5Qrcode.getCameras().then(cameras => {
         if(cameras && cameras.length) {
-            window.html5QrCode.start(cameras[0].id, { fps: 10 }, (text) => {
+            const backCamera = cameras.find(camera => /back|environment/gi.test(camera.label)) || cameras[0]; // for mobile devices (ie. iPhone)
+            
+            window.html5QrCode.start(backCamera.id, { fps: 10 }, (text) => {
                 try {
                     const url = new URL(text);
 
