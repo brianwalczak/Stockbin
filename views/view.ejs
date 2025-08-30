@@ -71,8 +71,9 @@
 		<div class="section-container">
             <div class="text-lg section-header">Quick Actions</div>
 
+            <button class="btn-red font-bold" style="margin-top: 5px; margin-bottom: 10px;" onclick="getQRCode('<%= viewing.id %>')">View QR Code</button>
             <div class="section-content flex justify-between">
-                 <a href="/edit/<%= viewing.id %>" class="btn-red font-bold" style="width: 48%; margin-top: 5px;">Edit</a>
+                <a href="/edit/<%= viewing.id %>" class="btn-red font-bold" style="width: 48%; margin-top: 5px;">Edit</a>
                 <form action="/api/delete/<%= viewing.id %>" method="POST" class="delete" type="<%= viewing.type %>" style="width: 48%;">
                     <button type="submit" class="btn-red font-bold" style="margin-top: 5px;">Delete</button>
                 </form>
@@ -80,10 +81,17 @@
         </div>
 
 		<p class="status text-center text-sm mt-2"></p>
+        <div class="QRCode_overlay">
+            <div class="mx-4 max-w-md mx-auto relative">
+                <button class="close material-icons text-gray-700" onclick="closeQRCode()">close</button>
+                <img class="code" src="" alt="QR Code"></img>
+                <button class="btn-red font-bold" onclick="printQRCode(); closeQRCode();">Print</button>
+            </div>
+        </div>
 	</section>
 
-
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.js"></script>
 	<script src="/js/view.js"></script>
     <%- include('snippets/footer') %>
 </body>

@@ -17,3 +17,50 @@ $('form.delete').submit(function (e) {
         }
     });
 });
+
+async function fadeIn(elem, ms) {
+	var opacity = 0;
+
+	elem.css('opacity', opacity);
+	elem.css('visibility', 'visible');
+
+	var timer = await setInterval(() => {
+		if (opacity >= 1) {
+			elem.css('opacity', 1);
+			clearInterval(timer);
+			return;
+		}
+
+		opacity += 0.1;
+		elem.css('opacity', opacity);
+	}, ms / 10);
+}
+
+async function getQRCode(id) {
+    try {
+        const code = await QRCode.toDataURL(id, {
+            color: {
+                dark: '#000000',
+                light: '#ffffff'
+            }
+        });
+        
+        $('.QRCode_overlay .code').attr('src', code);
+        await fadeIn($('.QRCode_overlay'), 200);
+    } catch(error) {
+        alert('Whoops! An unknown error occured while generating the QR code.');
+        return console.error(error);
+    }
+}
+
+function printQRCode() {
+    const URL = $('.QRCode_overlay .code').attr('src');
+    if(!URL.length) return;
+
+    const win = window.open('_blank');
+    return win.document.write(`<img src="${URL}" width="400" height="400" onload="window.print(); window.close();" />`);
+}
+
+function closeQRCode() {
+    $('.QRCode_overlay').css('visibility', 'hidden');
+}
