@@ -27,6 +27,7 @@
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "lokijs": "^1.5.12",
+    "luxon": "^3.7.1",
     "nodemailer": "^7.0.5"
   }
 }

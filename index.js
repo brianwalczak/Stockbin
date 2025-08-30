@@ -1,4 +1,5 @@
 const { getUsers, getUser, updateUser, deleteUser, getRecord, insertRecord, updateRecord, deleteRecord, recordExists } = require('./db.js');
+const { DateTime } = require('luxon');
 const session = require('express-session');
 const nodemailer = require('nodemailer');
 const express = require('express');
@@ -83,6 +84,14 @@ const requireAuth = (userData = false) => {
 };
 
 app.get('/', requireAuth(true), async (req, res) => {
+    if (res.locals.data?.items && res.locals.data?.timezone) {
+        res.locals.data.items.forEach(item => {
+            if (item.expires) {
+                item.expiresUTC = DateTime.fromISO(item.expires, { zone: res.locals.data.timezone }).toUTC().toMillis();
+            }
+        });
+    }
+
     res.render('index', { activePage: 'home' });
 });
 
