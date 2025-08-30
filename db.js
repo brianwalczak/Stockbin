@@ -37,6 +37,24 @@ const getUser = async (userId) => {
     }
 };
 
+async function updateUser(userId, data) {
+    try {
+        const users = await getUsers();
+        const user = users.by('id', userId);
+
+        if (!user) {
+            users.insert({ id: userId, items: [], ...data });
+        } else {
+            users.update({ ...user, ...data });
+        }
+
+        return true;
+    } catch(error) {
+        console.error(`${chalk.red('[DATABASE]')} Error updating user account in database:`, error);
+        return false;
+    }
+}
+
 async function deleteUser(userId) {
     try {
         const users = await getUsers();
@@ -138,4 +156,4 @@ process.on('SIGINT', async () => {
     }
 });
 
-module.exports = { getUsers, getUser, deleteUser, getRecord, insertRecord, updateRecord, deleteRecord, recordExists };
+module.exports = { getUsers, getUser, updateUser, deleteUser, getRecord, insertRecord, updateRecord, deleteRecord, recordExists };

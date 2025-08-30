@@ -12,3 +12,18 @@ function deleteAccount() {
         });
     }
 }
+
+$(document).ready(function () {
+    $('#timezone').on('change', function () {
+        var timezone = $(this).val();
+
+        $.ajax({
+            url: '/api/user/update',
+            type: 'POST',
+            data: { timezone: timezone },
+            error: function (err) {
+                alert('Whoops! An error occurred while updating your timezone. Please try again later.');
+            }
+        });
+    });
+});

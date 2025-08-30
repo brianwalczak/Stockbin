@@ -1,4 +1,4 @@
-const { getUsers, getUser, deleteUser, getRecord, insertRecord, updateRecord, deleteRecord, recordExists } = require('./db.js');
+const { getUsers, getUser, updateUser, deleteUser, getRecord, insertRecord, updateRecord, deleteRecord, recordExists } = require('./db.js');
 const session = require('express-session');
 const nodemailer = require('nodemailer');
 const express = require('express');
@@ -35,6 +35,10 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+function isValidDate(d) {
+    return d instanceof Date && !isNaN(d.getTime());
+}
 
 app.use(async (req, res, next) => {
     try {
@@ -159,6 +163,21 @@ app.get('/api/export', requireAuth(true), async (req, res) => {
     }
 });
 
+app.post('/api/user/update', requireAuth(false), async (req, res) => {
+    try {
+        const { timezone } = req.body;
+
+        if (timezone && (!Intl.supportedValuesOf("timeZone").includes(timezone))) {
+            return res.json({ success: false, reason: 'Whoops! An invalid timezone was provided.' });
+        }
+
+        await updateUser(req.session.user, { timezone });
+        return res.json({ success: true });
+    } catch (err) {
+        return res.json({ success: false, reason: 'Whoops! Your account can\'t be updated right now.' });
+    }
+});
+
 app.post('/api/delete/:id', requireAuth(true), async (req, res) => {
     try {
         const item = res.locals.data.items.find(i => i.id === req.params.id);
@@ -248,9 +267,11 @@ app.post('/api/editor{/:id}', requireAuth(false), async (req, res) => {
                     return res.json({ success: false, reason: 'Whoops! Your item tags must have a maximum length of 512 characters.' });
                 } else if(req.body.threshold && (isNaN(req.body.threshold) || Number(req.body.threshold) <= 0)) {
                     return res.json({ success: false, reason: 'Whoops! You must provide a valid low stock threshold.' });
+                } else if(req.body.expires && !isValidDate(new Date(req.body.expires))) {
+                    return res.json({ success: false, reason: 'Whoops! You must provide a valid expiration date.' });
                 }
 
-                record = { type, name, id, updatedAt: Date.now(), quantity: Number(quantity), bin: location, description: (req.body.description && req.body.description.length > 0) ? req.body.description : null, tags: (req.body.tags && req.body.tags.length > 0) ? req.body.tags.toLowerCase().split(',').map(tag => tag.trim()) : [], threshold: (req.body.threshold && !isNaN(req.body.threshold)) ? Number(req.body.threshold) : null };
+                record = { type, name, id, updatedAt: Date.now(), quantity: Number(quantity), bin: location, description: (req.body.description && req.body.description.length > 0) ? req.body.description : null, tags: (req.body.tags && req.body.tags.length > 0) ? req.body.tags.toLowerCase().split(',').map(tag => tag.trim()) : [], threshold: (req.body.threshold && !isNaN(req.body.threshold)) ? Number(req.body.threshold) : null, expires: (req.body.expires && req.body.expires.length > 0) ? req.body.expires : null };
                 break;
             }
             case 'bin': {
@@ -283,6 +304,21 @@ app.post('/api/editor{/:id}', requireAuth(false), async (req, res) => {
         }
 
         if(record) {
+            try {
+                if(record.expires) {
+                    // First-time users, pull timezone from their form if not exists
+                    const user = await getUser(req.session.user);
+
+                    if(!user.timezone) {
+                        if(req.body?.timezone) {
+                            await updateUser(req.session.user, { timezone: req.body.timezone });
+                        } else {
+                            return res.json({ success: false, reason: 'Whoops! Please select a timezone in your settings.' });
+                        }
+                    }
+                }
+            } catch {};
+
             if(editing) {
                 await updateRecord(req.session.user, editing, record);
             } else {

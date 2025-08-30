@@ -28,6 +28,16 @@ $(document).ready(function () {
         e.preventDefault();
         $('.status').css('color', '#ef9d00').text('Processing your request, please wait...');
 
+        // Update the form to contain user timezone
+        try {
+            var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            var $tzData = $(this).find('input[name="timezone"]');
+
+            if ($tzData.length) {
+                $tzData.val(tz);
+            }
+        } catch {};
+
         var form = $(this);
         $.post(form.attr('action'), form.serialize(), function (response) {
             if (response.success) {
