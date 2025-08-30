@@ -71,7 +71,7 @@
 		<div class="section-container">
             <div class="text-lg section-header">Quick Actions</div>
 
-            <button class="btn-red font-bold" style="margin-top: 5px; margin-bottom: 10px;" onclick="getQRCode('<%= viewing.id %>')">View QR Code</button>
+            <button class="btn-red font-bold" style="margin-top: 5px; margin-bottom: 10px;" onclick="getQRCode()">View QR Code</button>
             <div class="section-content flex justify-between">
                 <a href="/edit/<%= viewing.id %>" class="btn-red font-bold" style="width: 48%; margin-top: 5px;">Edit</a>
                 <form action="/api/delete/<%= viewing.id %>" method="POST" class="delete" type="<%= viewing.type %>" style="width: 48%;">

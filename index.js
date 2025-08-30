@@ -7,7 +7,7 @@ const chalk = require('chalk');
 const path = require('path');
 const http = require('http');
 const app = express();
-const appVersion = '0.1.2';
+const appVersion = '0.1.3';
 const emailCodes = [];
 
 require('dotenv').config({ quiet: true });

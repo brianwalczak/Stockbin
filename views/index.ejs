@@ -47,13 +47,28 @@
 			<div class="section-container">
 				<div class="text-lg section-header">Quick Actions</div>
 				<div class="section-content">
-					<a href="/create/?type=item" class="btn-red font-bold" style="margin-top: 5px;">Add Item</a>
-					<a href="/create/?type=bin" class="btn-red font-bold">Add Bin</a>
+					<button class="btn-red font-bold" style="margin-top: 5px;" onclick="scanQRCode()">Scan QR Code</button>
+
+					<div class="section-content flex justify-between">
+						<a href="/create/?type=item" class="btn-red font-bold" style="width: 48%;">Add Item</a>
+						<a href="/create/?type=bin" class="btn-red font-bold" style="width: 48%;">Add Bin</a>
+					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-
+	
+	<div class="QRCode_overlay">
+        <div class="mx-4 max-w-md mx-auto relative" style="width: 90%;">
+			<button class="close material-icons text-white" style="display: none;" onclick="closeQRCode()">close</button>
+            <div id="reader" style="width: 100%;"></div>
+			<p class="status" style="width: 100%; text-align: center; color: white; margin-top: 5px; display: none;">Start by scanning your QR code above.</p>
+        </div>
+    </div>
+	
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+	<script src="/js/home.js"></script>
     <%- include('snippets/footer') %>
 </body>
 </html>

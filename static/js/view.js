@@ -36,9 +36,9 @@ async function fadeIn(elem, ms) {
 	}, ms / 10);
 }
 
-async function getQRCode(id) {
+async function getQRCode() {
     try {
-        const code = await QRCode.toDataURL(id, {
+        const code = await QRCode.toDataURL(window.location.href, {
             color: {
                 dark: '#000000',
                 light: '#ffffff'
