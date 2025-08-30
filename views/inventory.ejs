@@ -29,13 +29,13 @@
                     <label class="item py-2 px-4 font-semibold cursor-pointer border-b-2 <%= (type && type === 'bin') ? 'border-red-500' : 'border-transparent hover:text-gray-600 hover:border-gray-300' %>" value="bin">Bins</label>
                 </div>
                 <form action="/inventory" method="GET" class="flex gap-2">
-                    <input name='q' id="search" type="text" class="w-2/3 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder="Search inventory...">
-                    <select name='tags' id="tag_search" class="w-1/3 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    <input name='q' id="search" type="text" class="w-2/3 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder="Search inventory..." value="<%= params.get('q') || '' %>">
+                    <select name='tags' id="tag_search" class="w-1/3 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500" onchange="this.form.submit()">
                         <option value="">All Tags</option>
                         <% const tags = Array.from(new Set((data.items || []).flatMap(item => item.tags || []))).filter(tag => tag && tag.length > 0);
                             
                         tags.forEach(tag => { %>
-                            <option value="<%= tag %>"><%= tag %></option>
+                            <option value="<%= tag %>"<%= params.get('tags') === tag ? ' selected' : '' %>><%= tag %></option>
                         <% }); %>
                     </select>
                 </form>
