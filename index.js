@@ -132,18 +132,39 @@ app.get('/inventory', requireAuth(true), async (req, res) => {
         const startIndex = (page - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
 
-        const filteredItems = (type && type !== 'all') ? res.locals.data.items.filter(item => item.type === type) : res.locals.data.items;
-        const totalPages = Math.max(Math.ceil(filteredItems.length / itemsPerPage), 1);
+        let filteredItems = (type && type !== 'all') ? res.locals.data.items.filter(item => item.type === type) : res.locals.data.items;
+        
+        // Add search query filtering
+        if(req.query?.q && req.query.q.length > 0) {
+            const q = req.query.q.toLowerCase();
+            filteredItems = filteredItems.filter(item => item.name.toLowerCase().includes(q));
+        }
 
-        if (page < 1 || page > totalPages) return res.redirect(`/inventory/?type=${type}&page=${page < 1 ? 1 : totalPages}`);
+        // Add tags filtering
+        if(req.query?.tags && req.query.tags.length > 0) {
+            const tag = req.query.tags.toLowerCase();
+            filteredItems = filteredItems.filter(item => item.tags && item.tags.some(t => t.includes(tag)));
+        }
+
+        const totalPages = Math.max(Math.ceil(filteredItems.length / itemsPerPage), 1);
+        const params = new URLSearchParams();
+
+        params.set('type', type);
+        if (req.query?.q && req.query.q.length > 0) params.set('q', req.query.q);
+        if (req.query?.tags && req.query.tags.length > 0) params.set('tags', req.query.tags);
+
+        if (page < 1 || page > totalPages) {
+            params.set('page', page < 1 ? 1 : totalPages);
+            return res.redirect(`/inventory/?${params.toString()}`);
+        }
 
         const results = filteredItems.slice(startIndex, endIndex);
         results.sort((a, b) => (b.updatedAt ? new Date(b.updatedAt) : 0) - (a.updatedAt ? new Date(a.updatedAt) : 0));
 
-        res.render('inventory', { activePage: 'inventory', page, results, totalPages, type });
+        res.render('inventory', { activePage: 'inventory', page, results, totalPages, type, params });
     } catch(err) {
         console.error(`${chalk.red('[SERVER]')} Error when processing request:`, err);
-        res.render('inventory', { activePage: 'inventory', page: 1, results: [], totalPages: 1, type: 'all' });
+        res.render('inventory', { activePage: 'inventory', page: 1, results: [], totalPages: 1, type: 'all', params: new URLSearchParams('?type=all') });
     }
 });
 
