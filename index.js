@@ -149,7 +149,7 @@ app.get('/inventory', requireAuth(true), async (req, res) => {
         const totalPages = Math.max(Math.ceil(filteredItems.length / itemsPerPage), 1);
         const params = new URLSearchParams();
 
-        params.set('type', type);
+        if(type !== 'all') params.set('type', type);
         if (req.query?.q && req.query.q.length > 0) params.set('q', req.query.q);
         if (req.query?.tags && req.query.tags.length > 0) params.set('tags', req.query.tags);
 
