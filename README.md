@@ -1,5 +1,5 @@
 <h1 align="center">Stockbin - Inventory management made easy.</h1>
-<p align="center">A feature-rich inventory management system, allowing you to you organize, track, and locate your assets with ease.</p>
+<p align="center">A feature-rich inventory management system, allowing you to you organize, track, and locate your assets with ease.<br><br> <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg"></a> <img src="https://hackatime-badge.hackclub.com/U091MEESEDT/Stockbin/?label=Time%20Spent" /></p>
 
 > [!WARNING]
 > **This project is currently in its beta state as I gather user feedback. Many features are still on the way! If you encounter any issues, please report them <a href='https://github.com/BrianWalczak/Stockbin/issues'>here</a> :)**
